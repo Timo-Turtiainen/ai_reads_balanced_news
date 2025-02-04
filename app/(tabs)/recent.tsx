@@ -3,12 +3,12 @@ import { StyleSheet } from 'react-native'
 import EditScreenInfo from '@/components/EditScreenInfo'
 import { Text, View } from '@/components/Themed'
 
-export default function HomeScreen() {
+export default function RecentScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen Title</Text>
+      <Text style={styles.title}>Recents</Text>
       <View style={styles.separator} lightColor='#eee' darkColor='rgba(255,255,255,0.1)' />
-      <EditScreenInfo path='app/(tabs)/index.tsx' />
+      <EditScreenInfo path='app/(tabs)/recent.tsx' />
     </View>
   )
 }
@@ -17,10 +17,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   title: {
-    marginTop: 15,
     fontSize: 20,
     fontWeight: 'bold',
   },
