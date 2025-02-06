@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'expo-router'
 import axios from 'axios'
-import { SafeAreaView, StyleSheet, FlatList, Image, ActivityIndicator } from 'react-native'
+import {
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  Image,
+  ActivityIndicator,
+  Pressable,
+} from 'react-native'
 
 import { Text, View } from './Themed'
 
@@ -15,14 +23,14 @@ interface Article {
   content: string | null
 }
 
-export default function NewsScreen() {
+export default function NewsFeedScreen() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const baseUrl = process.env.EXPO_PUBLIC_API_URL
   const apiKey = process.env.EXPO_PUBLIC_API_KEY
 
-  const baseURL = `${baseUrl}top-headlines?country=us&apiKey=${apiKey}`
+  const baseURL = `${baseUrl}everything?q=""trump&apiKey=${apiKey}`
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -46,12 +54,25 @@ export default function NewsScreen() {
       data={articles}
       keyExtractor={item => item.url}
       renderItem={({ item }) => (
-        <View style={styles.card}>
-          {item.urlToImage && <Image source={{ uri: item.urlToImage }} style={styles.image} />}
-          <Text style={styles.source}>{item.source.name}</Text>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
-        </View>
+        <Link
+          href={{
+            pathname: '/NewsScreen',
+            params: { article: JSON.stringify(item) },
+          }}
+          asChild
+        >
+          <Pressable>
+            <View style={styles.card}>
+              {item.urlToImage && <Image source={{ uri: item.urlToImage }} style={styles.image} />}
+              <View style={styles.sourceContainer}>
+                <Text style={styles.source}>{item.source.name}</Text>
+                <Text style={styles.author}>{item.author}</Text>
+              </View>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
+          </Pressable>
+        </Link>
       )}
     />
   )
@@ -60,14 +81,28 @@ export default function NewsScreen() {
 const styles = StyleSheet.create({
   loader: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   errorText: { color: 'red', fontSize: 16, textAlign: 'center', marginTop: 20 },
-  card: {
+  card: { backgroundColor: '#2b2a2a', marginVertical: 10, borderRadius: 8, elevation: 2 },
+  sourceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     backgroundColor: '#2b2a2a',
-    marginVertical: 10,
-    borderRadius: 8,
-    elevation: 2,
+    paddingRight: 15,
   },
-  source: { paddingLeft: 15, fontSize: 15, color: '#fff', marginTop: 5 },
-  image: { width: '100%', height: 200, borderRadius: 8 },
+  source: {
+    paddingLeft: 15,
+    fontSize: 15,
+    color: '#fff',
+    marginTop: 5,
+    justifyContent: 'flex-end',
+  },
+  author: {
+    paddingLeft: 15,
+    fontSize: 15,
+    color: '#fff',
+    marginTop: 5,
+    justifyContent: 'flex-start',
+  },
+  image: { width: '100%', height: 200, borderTopLeftRadius: 8, borderTopRightRadius: 8 },
   title: { paddingLeft: 15, fontSize: 18, color: '#fff', fontWeight: 'bold', marginTop: 10 },
   description: { paddingLeft: 15, paddingBottom: 15, fontSize: 14, color: '#fff', marginTop: 5 },
 })

@@ -1,13 +1,15 @@
-import { StyleSheet } from 'react-native'
+import { SafeAreaView, StyleSheet } from 'react-native'
 
-import NewsScreen from '@/components/NewsScreen'
+import NewsFeedScreen from '@/components/NewsFeedScreen'
 import { Text, View } from '@/components/Themed'
 
-export default function HomeScreen() {
+export default function Index() {
   return (
+    // <SafeAreaView>
     <View style={styles.container}>
-      <NewsScreen />
+      <NewsFeedScreen />
     </View>
+    // </SafeAreaView>
   )
 }
 
