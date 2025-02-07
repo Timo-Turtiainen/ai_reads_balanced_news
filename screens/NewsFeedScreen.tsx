@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'expo-router'
 import axios from 'axios'
-import {
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  Image,
-  ActivityIndicator,
-  Pressable,
-} from 'react-native'
+import { StyleSheet, FlatList, Image, ActivityIndicator, Pressable } from 'react-native'
 
-import { Text, View } from './Themed'
+import { Text, View } from '../components/Themed'
 
 interface Article {
   source: { id: string | null; name: string }
