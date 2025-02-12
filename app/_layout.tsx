@@ -3,10 +3,14 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import 'react-native-reanimated'
+import * as AppleAuthentication from 'expo-apple-authentication'
+import { StyleSheet } from 'react-native'
 
 import { useColorScheme } from '@/components/useColorScheme'
+import { View, Text } from '@/components/Themed'
+import Login from '@/screens/LoginScreen'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,15 +51,29 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme()
-
+  const [user, setUser] = useState<AppleAuthentication.AppleAuthenticationCredential | null>(null)
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-        <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-        <Stack.Screen name='NewsScreen' options={{ headerShown: false, presentation: 'modal' }} />
-        <Stack.Screen name='+not-found' />
-      </Stack>
+      {user ? (
+        <Stack>
+          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+          <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
+          <Stack.Screen name='NewsScreen' options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen name='+not-found' />
+        </Stack>
+      ) : (
+        <View style={styles.login}>
+          <Login onLoginSuccess={setUser} />
+        </View>
+      )}
     </ThemeProvider>
   )
 }
+const styles = StyleSheet.create({
+  login: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+})
