@@ -45,7 +45,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
           buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
           cornerRadius={5}
-          style={styles.button}
+          style={styles.loginButton}
           onPress={handleAppleSignIn}
         />
       </View>
@@ -55,7 +55,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'flex-start' },
-  button: { width: 200, height: 44 },
+  loginButton: { width: 200, height: 44 },
   text: { fontSize: 36, marginBottom: 10 },
   logo: { width: screenWidth, height: screenHeight * 0.4 },
   apple: { alignItems: 'center' },
