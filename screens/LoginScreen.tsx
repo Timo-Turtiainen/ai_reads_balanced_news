@@ -19,7 +19,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       })
-
+      console.log('credential: ', credential)
       onLoginSuccess(credential)
     } catch (error: any) {
       if (error.code === 'ERR_REQUEST_CANCELED') {

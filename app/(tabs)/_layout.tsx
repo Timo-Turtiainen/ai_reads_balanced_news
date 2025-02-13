@@ -32,7 +32,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
           headerLeft: () => <></>,
           headerRight: () => (
-            <Link href='/modal' asChild>
+            <Link href='/Profile' asChild>
               <Pressable>
                 {({ pressed }) => (
                   <Entypo

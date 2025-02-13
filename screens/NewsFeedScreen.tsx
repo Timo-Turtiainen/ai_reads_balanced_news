@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'expo-router'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Link, useFocusEffect } from 'expo-router'
 import axios from 'axios'
-import { StyleSheet, FlatList, Image, ActivityIndicator, Pressable } from 'react-native'
+import {
+  StyleSheet,
+  FlatList,
+  Image,
+  ActivityIndicator,
+  Pressable,
+  RefreshControl,
+} from 'react-native'
 
 import { Text, View } from '../components/Themed'
 
@@ -19,25 +26,42 @@ interface Article {
 export default function NewsFeedScreen() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const baseUrl = process.env.EXPO_PUBLIC_API_URL
   const apiKey = process.env.EXPO_PUBLIC_API_KEY
 
   const baseURL = `${baseUrl}everything?q=""trump&apiKey=${apiKey}`
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const { data } = await axios.get(baseURL)
-        setArticles(data.articles)
-      } catch (err) {
-        setError('Failed to load news')
-      } finally {
-        setLoading(false)
-      }
+  const fetchNews = async () => {
+    try {
+      const { data } = await axios.get(baseURL)
+      setArticles(data.articles)
+    } catch (err) {
+      setError('Failed to load news')
+    } finally {
+      setLoading(false)
     }
-    fetchNews()
-  }, [])
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('useCallback')
+      fetchNews()
+    }, [])
+  )
+
+  async function onRefresh() {
+    try {
+      console.log('refresh push down')
+      setRefreshing(true)
+      await fetchNews()
+    } catch (err) {
+      setError('Failed to load news')
+    } finally {
+      setRefreshing(false)
+    }
+  }
 
   if (loading) return <ActivityIndicator style={styles.loader} size='large' color='#1a1b1b' />
   if (error) return <Text style={styles.errorText}>{error}</Text>
@@ -46,6 +70,7 @@ export default function NewsFeedScreen() {
     <FlatList
       data={articles}
       keyExtractor={item => item.url}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       renderItem={({ item }) => (
         <Link
           href={{
