@@ -32,7 +32,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
           headerLeft: () => <></>,
           headerRight: () => (
-            <Link href='/Profile' asChild>
+            <Link href='/ProfileScreen' asChild>
               <Pressable>
                 {({ pressed }) => (
                   <Entypo

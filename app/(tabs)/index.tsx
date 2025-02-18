@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import NewsFeedScreen from '@/screens/NewsFeedScreen'
-import Login from '@/screens/LoginScreen'
 
 export default function Index() {
   return (

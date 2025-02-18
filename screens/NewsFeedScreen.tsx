@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { Dimensions } from 'react-native'
 import { Link, useFocusEffect } from 'expo-router'
 import axios from 'axios'
 import {
@@ -23,6 +24,8 @@ interface Article {
   content: string | null
 }
 
+const screenWidth = Dimensions.get('window').width
+
 export default function NewsFeedScreen() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
@@ -31,7 +34,7 @@ export default function NewsFeedScreen() {
   const baseUrl = process.env.EXPO_PUBLIC_API_URL
   const apiKey = process.env.EXPO_PUBLIC_API_KEY
 
-  const baseURL = `${baseUrl}everything?q=""trump&apiKey=${apiKey}`
+  const baseURL = `${baseUrl}top-headlines?country=us&apiKey=${apiKey}`
 
   const fetchNews = async () => {
     try {
@@ -99,7 +102,13 @@ export default function NewsFeedScreen() {
 const styles = StyleSheet.create({
   loader: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   errorText: { color: 'red', fontSize: 16, textAlign: 'center', marginTop: 20 },
-  card: { backgroundColor: '#2b2a2a', marginVertical: 10, borderRadius: 8, elevation: 2 },
+  card: {
+    width: screenWidth,
+    backgroundColor: '#2b2a2a',
+    marginVertical: 10,
+    borderRadius: 8,
+    elevation: 2,
+  },
   sourceContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

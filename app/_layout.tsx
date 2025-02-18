@@ -3,14 +3,14 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import 'react-native-reanimated'
-import * as AppleAuthentication from 'expo-apple-authentication'
 import { StyleSheet } from 'react-native'
 
 import { useColorScheme } from '@/components/useColorScheme'
-import { View, Text } from '@/components/Themed'
-import Login from '@/screens/LoginScreen'
+import { View } from '@/components/Themed'
+import { AuthProvider, useAuth } from '@/context/AuthContext'
+import Login from '@/app/LoginScreen'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -46,12 +46,17 @@ export default function RootLayout() {
     return null
   }
 
-  return <RootLayoutNav />
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
+    </AuthProvider>
+  )
 }
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme()
-  const [user, setUser] = useState<AppleAuthentication.AppleAuthenticationCredential | null>(null)
+  const { user } = useAuth()
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       {user ? (
@@ -63,7 +68,7 @@ function RootLayoutNav() {
         </Stack>
       ) : (
         <View style={styles.login}>
-          <Login onLoginSuccess={setUser} />
+          <Login />
         </View>
       )}
     </ThemeProvider>

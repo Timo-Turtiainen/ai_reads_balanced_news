@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router'
-import { Text, View, Image, StyleSheet, ScrollView } from 'react-native'
+import { Text, Image, StyleSheet, ScrollView } from 'react-native'
 
 export default function NewsScreen() {
   const { article } = useLocalSearchParams()

@@ -1,14 +1,32 @@
 import { StatusBar } from 'expo-status-bar'
-import { Button, Platform, Pressable, StyleSheet } from 'react-native'
-import { Entypo } from '@expo/vector-icons'
-import * as AppleAuthentication from 'expo-apple-authentication'
-
+import { Platform, Pressable, StyleSheet } from 'react-native'
+import { useRouter } from 'expo-router'
 import Colors from '@/constants/Colors'
-import EditScreenInfo from '@/components/EditScreenInfo'
+
 import { Text, View } from '@/components/Themed'
+import { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useAuth } from '@/context/AuthContext'
 
 export default function ProfileScreen() {
-  async function handleSignOut() {}
+  const router = useRouter()
+  const { user, setUser } = useAuth()
+  useEffect(() => {
+    async function loadUser() {
+      const userData = await AsyncStorage.getItem('user')
+      if (userData) {
+        setUser(JSON.parse(userData))
+      }
+    }
+    loadUser()
+  }, [])
+
+  async function handleSignOut() {
+    await AsyncStorage.removeItem('user')
+    setUser(null)
+    router.navigate('/')
+  }
+
   return (
     <View style={styles.container}>
       <Pressable

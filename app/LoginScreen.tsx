@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, Alert, Image, Dimensions } from 'react-native'
 import * as AppleAuthentication from 'expo-apple-authentication'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { View, Text } from '../components/Themed'
+import { useAuth } from '@/context/AuthContext'
 
 const screenWidth = Dimensions.get('screen').width
 const screenHeight = Dimensions.get('screen').height
 
-interface LoginProps {
-  onLoginSuccess: (credential: AppleAuthentication.AppleAuthenticationCredential) => void
-}
-
-export default function Login({ onLoginSuccess }: LoginProps) {
+export default function Login() {
+  const { setUser } = useAuth()
   const handleAppleSignIn = async () => {
     try {
       const credential = await AppleAuthentication.signInAsync({
@@ -20,7 +19,8 @@ export default function Login({ onLoginSuccess }: LoginProps) {
         ],
       })
       console.log('credential: ', credential)
-      onLoginSuccess(credential)
+      setUser(credential)
+      await AsyncStorage.setItem('user', JSON.stringify(credential))
     } catch (error: any) {
       if (error.code === 'ERR_REQUEST_CANCELED') {
         Alert.alert('Sign-in Canceled', 'You canceled the sign-in process.')
