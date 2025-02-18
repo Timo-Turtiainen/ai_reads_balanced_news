@@ -12,16 +12,27 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AppleAuthentication.AppleAuthenticationCredential | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function loadUser() {
-      const storedUser = await AsyncStorage.getItem('user')
-      if (storedUser) {
-        setUser(JSON.parse(storedUser))
+      try {
+        const storedUser = await AsyncStorage.getItem('user')
+        if (storedUser) {
+          setUser(JSON.parse(storedUser))
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
     loadUser()
   }, [])
+
+  if (isLoading) {
+    return null
+  }
 
   const logout = async () => {
     await AsyncStorage.removeItem('user')

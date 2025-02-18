@@ -10,21 +10,10 @@ import { useAuth } from '@/context/AuthContext'
 
 export default function ProfileScreen() {
   const router = useRouter()
-  const { user, setUser } = useAuth()
-  useEffect(() => {
-    async function loadUser() {
-      const userData = await AsyncStorage.getItem('user')
-      if (userData) {
-        setUser(JSON.parse(userData))
-      }
-    }
-    loadUser()
-  }, [])
+  const { logout } = useAuth()
 
   async function handleSignOut() {
-    await AsyncStorage.removeItem('user')
-    setUser(null)
-    router.navigate('/')
+    logout()
   }
 
   return (
