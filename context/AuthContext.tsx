@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const storedUser = await AsyncStorage.getItem('user')
         if (storedUser) {
           setUser(JSON.parse(storedUser))
+          console.log('loadUser() user: ', user)
         }
       } catch (error) {
         console.log(error)

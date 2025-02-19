@@ -1,18 +1,14 @@
 import { StatusBar } from 'expo-status-bar'
 import { Platform, Pressable, StyleSheet } from 'react-native'
-import { useRouter } from 'expo-router'
-import Colors from '@/constants/Colors'
 
+import Colors from '@/constants/Colors'
 import { Text, View } from '@/components/Themed'
-import { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '@/context/AuthContext'
 
 export default function ProfileScreen() {
-  const router = useRouter()
   const { logout } = useAuth()
 
-  async function handleSignOut() {
+  function handleSignOut() {
     logout()
   }
 

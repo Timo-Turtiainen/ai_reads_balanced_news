@@ -6,7 +6,8 @@ import { Pressable } from 'react-native'
 import Colors from '@/constants/Colors'
 import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
-
+import ProfileIconButton from '@/components/ProfileIconButton'
+import { useAuth } from '@/context/AuthContext'
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: { name: React.ComponentProps<typeof Entypo>['name']; color: string }) {
   return <Entypo size={28} style={{ marginBottom: -3 }} {...props} />
@@ -14,7 +15,11 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof Entypo>['name']; 
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
-
+  const { user } = useAuth()
+  const firstLetter = user?.fullName?.givenName
+    ? user.fullName.givenName.charAt(0).toUpperCase()
+    : ''
+  console.log(firstLetter)
   return (
     <Tabs
       screenOptions={{
@@ -30,7 +35,16 @@ export default function TabLayout() {
           title: '',
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
-          headerLeft: () => <></>,
+
+          headerLeft: () => (
+            <Link href='/ProfileScreen' asChild>
+              <ProfileIconButton
+                firstLetter={firstLetter}
+                color={Colors[colorScheme ?? 'light'].text}
+              />
+            </Link>
+          ),
+
           headerRight: () => (
             <Link href='/ProfileScreen' asChild>
               <Pressable>
