@@ -8,6 +8,7 @@ import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import ProfileIconButton from '@/components/ProfileIconButton'
 import { useAuth } from '@/context/AuthContext'
+
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: { name: React.ComponentProps<typeof Entypo>['name']; color: string }) {
   return <Entypo size={28} style={{ marginBottom: -3 }} {...props} />
@@ -36,7 +37,7 @@ export default function TabLayout() {
           title: '',
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
-
+          tabBarStyle: { marginLeft: 20 },
           headerLeft: () => (
             <Link href='/ProfileScreen' asChild>
               <ProfileIconButton
@@ -45,7 +46,6 @@ export default function TabLayout() {
               />
             </Link>
           ),
-
           headerRight: () => (
             <Link href='/' asChild>
               <Pressable>
@@ -66,6 +66,7 @@ export default function TabLayout() {
         name='recent'
         options={{
           title: 'Recent',
+          headerTintColor: Colors[colorScheme ?? 'light'].text,
           tabBarIcon: ({ color }) => <TabBarIcon name='news' color={color} />,
         }}
       />

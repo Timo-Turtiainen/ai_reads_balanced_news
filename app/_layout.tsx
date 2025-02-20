@@ -11,6 +11,7 @@ import { useColorScheme } from '@/components/useColorScheme'
 import { View } from '@/components/Themed'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 import Login from '@/app/LoginScreen'
+import Colors from '@/constants/Colors'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -63,15 +64,27 @@ function RootLayoutNav() {
         <Stack>
           <Stack.Screen
             name='(tabs)'
-            options={{ headerShown: false, headerTitle: ' ', headerTintColor: 'red' }}
+            options={{
+              headerShown: false,
+              headerTitle: ' ',
+              headerTintColor: Colors[colorScheme ?? 'light'].text,
+            }}
           />
-          <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
           <Stack.Screen
             name='NewsScreen'
             options={{
               headerShown: true,
-              headerTitle: '',
-
+              headerTitle: ' ',
+              headerTintColor: Colors[colorScheme ?? 'light'].text,
+              presentation: 'card',
+            }}
+          />
+          <Stack.Screen
+            name='ProfileScreen'
+            options={{
+              headerShown: true,
+              headerTitle: ' ',
+              headerTintColor: Colors[colorScheme ?? 'light'].text,
               presentation: 'card',
             }}
           />
