@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar'
 import { Platform, Pressable, StyleSheet } from 'react-native'
 
+import { useColorScheme } from '@/components/useColorScheme'
 import Colors from '@/constants/Colors'
 import { Text, View } from '@/components/Themed'
 import { useAuth } from '@/context/AuthContext'
 
 export default function ProfileScreen() {
   const { logout } = useAuth()
+  const colorScheme = useColorScheme()
 
   function handleSignOut() {
     logout()
@@ -18,10 +20,14 @@ export default function ProfileScreen() {
         onPress={handleSignOut}
         style={({ pressed }) => [
           styles.logoutButton,
-          { backgroundColor: pressed ? Colors.dark.buttonPress : Colors.dark.background },
+          {
+            backgroundColor: pressed
+              ? Colors[colorScheme ?? 'light'].buttonPress
+              : Colors[colorScheme ?? 'light'].background,
+          },
         ]}
       >
-        <Text style={styles.logoutText}>Logout</Text>
+        <Text style={{ color: Colors[colorScheme ?? 'light'].text }}>Logout</Text>
       </Pressable>
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>
@@ -49,7 +55,6 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     borderWidth: 1,
     borderRadius: 20,
-    // backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
   },

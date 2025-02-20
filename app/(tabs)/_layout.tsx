@@ -15,11 +15,12 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof Entypo>['name']; 
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
+
   const { user } = useAuth()
   const firstLetter = user?.fullName?.givenName
     ? user.fullName.givenName.charAt(0).toUpperCase()
     : ''
-  console.log(firstLetter)
+
   return (
     <Tabs
       screenOptions={{
@@ -46,7 +47,7 @@ export default function TabLayout() {
           ),
 
           headerRight: () => (
-            <Link href='/ProfileScreen' asChild>
+            <Link href='/' asChild>
               <Pressable>
                 {({ pressed }) => (
                   <Entypo
