@@ -8,10 +8,14 @@ import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import ProfileIconButton from '@/components/ProfileIconButton'
 import { useAuth } from '@/context/AuthContext'
-
+import { View } from '@/components/Themed'
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: { name: React.ComponentProps<typeof Entypo>['name']; color: string }) {
-  return <Entypo size={28} style={{ marginBottom: -3 }} {...props} />
+function TabBarIcon(props: {
+  name: React.ComponentProps<typeof Entypo>['name']
+  color: string
+  size: number
+}) {
+  return <Entypo style={{ marginBottom: -3 }} {...props} />
 }
 
 export default function TabLayout() {
@@ -29,6 +33,8 @@ export default function TabLayout() {
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
+        headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].background },
+        tabBarStyle: { backgroundColor: Colors[colorScheme ?? 'light'].background },
       }}
     >
       <Tabs.Screen
@@ -36,15 +42,17 @@ export default function TabLayout() {
         options={{
           title: '',
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
-          tabBarStyle: { marginLeft: 20 },
+          tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} size={28} />,
+
           headerLeft: () => (
-            <Link href='/ProfileScreen' asChild>
-              <ProfileIconButton
-                firstLetter={firstLetter}
-                color={Colors[colorScheme ?? 'light'].text}
-              />
-            </Link>
+            <View style={{ marginLeft: 10 }}>
+              <Link href='/ProfileScreen' asChild>
+                <ProfileIconButton
+                  firstLetter={firstLetter}
+                  color={Colors[colorScheme ?? 'light'].text}
+                />
+              </Link>
+            </View>
           ),
           headerRight: () => (
             <Link href='/' asChild>
@@ -67,7 +75,7 @@ export default function TabLayout() {
         options={{
           title: 'Recent',
           headerTintColor: Colors[colorScheme ?? 'light'].text,
-          tabBarIcon: ({ color }) => <TabBarIcon name='news' color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name='news' color={color} size={28} />,
         }}
       />
     </Tabs>

@@ -1,29 +1,66 @@
 import { StatusBar } from 'expo-status-bar'
-import { Platform, Pressable, SafeAreaView, StyleSheet } from 'react-native'
+import { Platform, Pressable, SafeAreaView, StyleSheet, Switch } from 'react-native'
+import { Dimensions } from 'react-native'
+import { Feather, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons'
+import { Link, useRouter } from 'expo-router'
 
 import { useColorScheme } from '@/components/useColorScheme'
 import Colors from '@/constants/Colors'
 import { Text, View } from '@/components/Themed'
 import { useAuth } from '@/context/AuthContext'
-
-import { Dimensions } from 'react-native'
+import { useState } from 'react'
 
 const screenWidth = Dimensions.get('window').width
+
+type IconProps = {
+  name: string
+  color: string
+  size: number
+  iconLibrary?: 'Feather' | 'MaterialIcons' | 'FontAwesome' | 'Entypo'
+  style?: object
+}
+
+export function LinkIcon({ name, color, size, iconLibrary = 'Feather', style }: IconProps) {
+  const IconComponent =
+    iconLibrary === 'MaterialIcons'
+      ? MaterialIcons
+      : iconLibrary === 'FontAwesome'
+      ? FontAwesome
+      : iconLibrary === 'Feather'
+      ? Feather
+      : Entypo
+
+  return <IconComponent name={name as never} color={color} size={size} style={style} />
+}
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth()
   const colorScheme = useColorScheme()
+  const [isDarkMode, setIsDarkMode] = useState(colorScheme === 'dark')
+  const router = useRouter()
 
   const firstLetter = user?.fullName?.givenName
     ? user.fullName.givenName.charAt(0).toUpperCase()
     : ''
 
+  // State to manage theme selection (Dark/Light)
+
   function handleSignOut() {
     logout()
   }
 
+  // Handle toggling between dark and light mode
+  const toggleDarkMode = (value: boolean) => {
+    console.log(value)
+    setIsDarkMode(value)
+    // Set system theme here, persist it as needed (e.g., using AsyncStorage)
+  }
+
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].background }]}
+    >
+      {/* USER SECTION */}
       <View style={styles.userContainer}>
         <View style={styles.icon}>
           <Text style={styles.text}>{firstLetter}</Text>
@@ -35,6 +72,70 @@ export default function ProfileScreen() {
           <Text style={styles.email}>{user?.email}</Text>
         </View>
       </View>
+
+      {/* LINK SECTION */}
+
+      {/* NOTIFICATION */}
+      <Pressable
+        onPress={() => router.push('/+not-found')}
+        style={({ pressed }) => [
+          styles.linkContainer,
+          {
+            backgroundColor: pressed
+              ? Colors[colorScheme ?? 'light'].buttonPress
+              : Colors[colorScheme ?? 'light'].background,
+          },
+        ]}
+      >
+        <LinkIcon
+          name='bell'
+          color={Colors[colorScheme ?? 'light'].text}
+          size={24}
+          iconLibrary='Feather'
+          style={{ marginLeft: 10 }}
+        />
+        <Text style={{ fontSize: 16, marginLeft: 10, flex: 1 }}>Notifications</Text>
+
+        <LinkIcon
+          name='chevron-right'
+          color={Colors[colorScheme ?? 'light'].text}
+          size={24}
+          iconLibrary='Entypo'
+          style={{ marginRight: 20 }}
+        />
+      </Pressable>
+
+      {/* DARK MODE */}
+      <Pressable
+        onPress={() => router.push('/+not-found')}
+        style={({ pressed }) => [
+          styles.linkContainer,
+          {
+            backgroundColor: pressed
+              ? Colors[colorScheme ?? 'light'].buttonPress
+              : Colors[colorScheme ?? 'light'].background,
+          },
+        ]}
+      >
+        <LinkIcon
+          name='dark-mode'
+          color={Colors[colorScheme ?? 'light'].text}
+          size={24}
+          iconLibrary='MaterialIcons'
+          style={{ marginLeft: 10 }}
+        />
+        <Text style={{ fontSize: 16, marginLeft: 10, flex: 1 }}>Dark Mode</Text>
+
+        {/* Toggle Dark Mode */}
+        <Switch
+          value={isDarkMode}
+          onValueChange={toggleDarkMode}
+          trackColor={{ false: Colors[colorScheme ?? 'light'].buttonPress, true: '#0cdce7' }}
+          thumbColor={isDarkMode ? '#fff' : '#fff'}
+        />
+      </Pressable>
+
+      {/* LOGOUT BUTTON */}
       <View style={{ paddingTop: 20, alignItems: 'center' }}>
         <Pressable
           onPress={handleSignOut}
@@ -67,6 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     paddingVertical: 10,
+    marginBottom: 50,
   },
   user: {
     fontSize: 20,
@@ -108,5 +210,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     color: '#000',
+  },
+  linkContainer: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    alignItems: 'center',
+    height: 50,
+    width: '100%',
+    justifyContent: 'space-between',
   },
 })

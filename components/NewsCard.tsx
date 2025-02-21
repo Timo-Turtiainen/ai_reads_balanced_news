@@ -1,5 +1,6 @@
 import { Pressable, Image, StyleSheet } from 'react-native'
 import { Link } from 'expo-router'
+
 import { Text, View } from '@/components/Themed'
 import { Article } from '@/constants/types'
 import { Dimensions } from 'react-native'

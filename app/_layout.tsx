@@ -61,12 +61,16 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       {user ? (
-        <Stack>
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: Colors[colorScheme ?? 'light'].background },
+          }}
+        >
           <Stack.Screen
             name='(tabs)'
             options={{
               headerShown: false,
-              headerTitle: ' ',
+              headerTitle: '',
               headerTintColor: Colors[colorScheme ?? 'light'].text,
             }}
           />
@@ -74,18 +78,20 @@ function RootLayoutNav() {
             name='NewsScreen'
             options={{
               headerShown: true,
-              headerTitle: ' ',
+              headerTitle: '',
               headerTintColor: Colors[colorScheme ?? 'light'].text,
               presentation: 'card',
+              headerBackButtonDisplayMode: 'minimal',
             }}
           />
           <Stack.Screen
             name='ProfileScreen'
             options={{
               headerShown: true,
-              headerTitle: ' ',
+              headerTitle: '',
               headerTintColor: Colors[colorScheme ?? 'light'].text,
               presentation: 'card',
+              headerBackButtonDisplayMode: 'minimal',
             }}
           />
           <Stack.Screen name='+not-found' />
