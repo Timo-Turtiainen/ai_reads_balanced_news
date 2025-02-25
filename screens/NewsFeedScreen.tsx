@@ -2,20 +2,9 @@ import React, { useState, useCallback } from 'react'
 import { useFocusEffect } from 'expo-router'
 import axios from 'axios'
 import { StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
-
+import { Article } from '@/constants/types'
 import { Text } from '../components/Themed'
 import NewsCard from '@/components/NewsCard'
-
-interface Article {
-  source: { id: string | null; name: string }
-  author: string | null
-  title: string
-  description: string
-  url: string
-  urlToImage: string | null
-  publishedAt: string
-  content: string | null
-}
 
 export default function NewsFeedScreen() {
   const [articles, setArticles] = useState<Article[]>([])

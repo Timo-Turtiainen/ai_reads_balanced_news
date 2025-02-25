@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar'
-import { Platform, Pressable, SafeAreaView, StyleSheet, Switch } from 'react-native'
+import { useState } from 'react'
+import { Platform, Pressable, SafeAreaView, StyleSheet } from 'react-native'
 import { Dimensions } from 'react-native'
 import { Feather, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons'
-import { Link, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 
 import { useColorScheme } from '@/components/useColorScheme'
 import Colors from '@/constants/Colors'
 import { Text, View } from '@/components/Themed'
 import { useAuth } from '@/context/AuthContext'
-import { useState } from 'react'
 
 const screenWidth = Dimensions.get('window').width
 
@@ -36,7 +36,6 @@ export function LinkIcon({ name, color, size, iconLibrary = 'Feather', style }: 
 export default function ProfileScreen() {
   const { user, logout } = useAuth()
   const colorScheme = useColorScheme()
-  const [isDarkMode, setIsDarkMode] = useState(colorScheme === 'dark')
   const router = useRouter()
 
   const firstLetter = user?.fullName?.givenName
@@ -47,13 +46,6 @@ export default function ProfileScreen() {
 
   function handleSignOut() {
     logout()
-  }
-
-  // Handle toggling between dark and light mode
-  const toggleDarkMode = (value: boolean) => {
-    console.log(value)
-    setIsDarkMode(value)
-    // Set system theme here, persist it as needed (e.g., using AsyncStorage)
   }
 
   return (
@@ -107,7 +99,7 @@ export default function ProfileScreen() {
 
       {/* DARK MODE */}
       <Pressable
-        onPress={() => router.push('/+not-found')}
+        onPress={() => router.push('/SelectThemeScreen')}
         style={({ pressed }) => [
           styles.linkContainer,
           {
@@ -126,12 +118,12 @@ export default function ProfileScreen() {
         />
         <Text style={{ fontSize: 16, marginLeft: 10, flex: 1 }}>Dark Mode</Text>
 
-        {/* Toggle Dark Mode */}
-        <Switch
-          value={isDarkMode}
-          onValueChange={toggleDarkMode}
-          trackColor={{ false: Colors[colorScheme ?? 'light'].buttonPress, true: '#0cdce7' }}
-          thumbColor={isDarkMode ? '#fff' : '#fff'}
+        <LinkIcon
+          name='chevron-right'
+          color={Colors[colorScheme ?? 'light'].text}
+          size={24}
+          iconLibrary='Entypo'
+          style={{ marginRight: 20 }}
         />
       </Pressable>
 

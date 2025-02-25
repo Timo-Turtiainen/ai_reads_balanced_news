@@ -1,5 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { ThemeProviderContext, useTheme } from '@/context/ThemeContext'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
@@ -49,17 +50,21 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <ThemeProviderContext>
+        <RootLayoutNav />
+      </ThemeProviderContext>
     </AuthProvider>
   )
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme()
+  const colorScheme = useColorScheme() ?? 'light'
+  const { theme } = useTheme()
+  console.log('Theme is ', theme)
   const { user } = useAuth()
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
       {user ? (
         <Stack
           screenOptions={{
@@ -89,6 +94,16 @@ function RootLayoutNav() {
             options={{
               headerShown: true,
               headerTitle: '',
+              headerTintColor: Colors[colorScheme ?? 'light'].text,
+              presentation: 'card',
+              headerBackButtonDisplayMode: 'minimal',
+            }}
+          />
+          <Stack.Screen
+            name='SelectThemeScreen'
+            options={{
+              headerShown: true,
+              headerTitle: 'Theme',
               headerTintColor: Colors[colorScheme ?? 'light'].text,
               presentation: 'card',
               headerBackButtonDisplayMode: 'minimal',
