@@ -60,7 +60,6 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme() ?? 'light'
   const { theme } = useTheme()
-  console.log('Theme is ', theme)
   const { user } = useAuth()
 
   return (

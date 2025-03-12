@@ -37,7 +37,7 @@ export default function Login() {
         <Image source={require('../assets/images/news.jpeg')} style={styles.logo} />
         <View>
           <Text style={styles.text}>Welcome to</Text>
-          <Text style={styles.text}>Big Dicks News</Text>
+          <Text style={styles.text}>AI Reads Balanced News</Text>
         </View>
       </View>
       <View style={styles.apple}>
